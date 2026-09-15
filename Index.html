@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Ankitnayak - Login</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #111827, #1e3a8a);
+      padding: 20px;
+    }
+
+    .box {
+      width: 100%;
+      max-width: 390px;
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 8px;
+      color: #111827;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 25px;
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .tabs button {
+      width: 50%;
+      padding: 12px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .tabs button.active {
+      color: #2563eb;
+      border-bottom: 2px solid #2563eb;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #2563eb;
+    }
+
+    .main-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 10px;
+      background: #2563eb;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .main-btn:active {
+      transform: scale(0.98);
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 15px;
+      color: #2563eb;
+      font-size: 14px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 12px;
+      color: #888;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="box">
+
+    <h1>ANKITNAYAK</h1>
+    <p class="subtitle">My Personal Website</p>
+
+    <div class="tabs">
+      <button id="loginTab" class="active" onclick="showLogin()">
+        Login
+      </button>
+
+      <button id="signupTab" onclick="showSignup()">
+        Create Account
+      </button>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="loginForm">
+
+      <input
+        type="email"
+        id="loginEmail"
+        placeholder="Email address"
+      >
+
+      <input
+        type="password"
+        id="loginPassword"
+        placeholder="Password"
+      >
+
+      <button class="main-btn" onclick="login()">
+        Login
+      </button>
+
+      <p id="loginMessage" class="message"></p>
+
+    </div>
+
+
+    <!-- SIGNUP -->
+    <div id="signupForm" class="hidden">
+
+      <input
+        type="text"
+        id="signupName"
+        placeholder="Your name"
+      >
+
+      <input
+        type="email"
+        id="signupEmail"
+        placeholder="Email address"
+      >
+
+      <input
+        type="password"
+        id="signupPassword"
+        placeholder="Create password"
+      >
+
+      <button class="main-btn" onclick="signup()">
+        Create Account
+      </button>
+
+      <p id="signupMessage" class="message"></p>
+
+    </div>
+
+    <div class="footer">
+      © 2026 Ankitnayak
+    </div>
+
+  </div>
+
+
+  <script>
+
+    function showLogin() {
+
+      document.getElementById("loginForm")
+        .classList.remove("hidden");
+
+      document.getElementById("signupForm")
+        .classList.add("hidden");
+
+      document.getElementById("loginTab")
+        .classList.add("active");
+
+      document.getElementById("signupTab")
+        .classList.remove("active");
+    }
+
+
+    function showSignup() {
+
+      document.getElementById("signupForm")
+        .classList.remove("hidden");
+
+      document.getElementById("loginForm")
+        .classList.add("hidden");
+
+      document.getElementById("signupTab")
+        .classList.add("active");
+
+      document.getElementById("loginTab")
+        .classList.remove("active");
+    }
+
+
+    function signup() {
+
+      const name =
+        document.getElementById("signupName").value;
+
+      const email =
+        document.getElementById("signupEmail").value;
+
+      const password =
+        document.getElementById("signupPassword").value;
+
+      if (!name || !email || !password) {
+
+        document.getElementById("signupMessage")
+          .innerText = "Please fill all details.";
+
+        return;
+      }
+
+      localStorage.setItem("demoUser", email);
+
+      document.getElementById("signupMessage")
+        .innerText = "Account created! Now login.";
+
+      setTimeout(showLogin, 1000);
+    }
+
+
+    function login() {
+
+      const email =
+        document.getElementById("loginEmail").value;
+
+      const password =
+        document.getElementById("loginPassword").value;
+
+      if (!email || !password) {
+
+        document.getElementById("loginMessage")
+          .innerText = "Enter email and password.";
+
+        return;
+      }
+
+      const savedEmail =
+        localStorage.getItem("demoUser");
+
+      if (email === savedEmail) {
+
+        document.getElementById("loginMessage")
+          .innerText = "Login successful! 🎉";
+
+      } else {
+
+        document.getElementById("loginMessage")
+          .innerText = "Account not found. Create an account first.";
+      }
+    }
+
+  </script>
+
+</body>
+</html>
