@@ -1,292 +1,160 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <title>Ankitnayak - Login</title>
+<script>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+  const SUPABASE_URL = "https://jmkmncxcjnrghtsnnlni.supabase.co";
 
-    body {
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #111827, #1e3a8a);
-      padding: 20px;
-    }
+  const SUPABASE_PUBLISHABLE_KEY = sb_publishable_yhjkeY9HqvqB3oO03cfAoA_McdVoJoJ
 
-    .box {
-      width: 100%;
-      max-width: 390px;
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.35);
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 8px;
-      color: #111827;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #666;
-      margin-bottom: 25px;
-    }
-
-    .tabs {
-      display: flex;
-      margin-bottom: 20px;
-      border-bottom: 1px solid #ddd;
-    }
-
-    .tabs button {
-      width: 50%;
-      padding: 12px;
-      border: none;
-      background: none;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .tabs button.active {
-      color: #2563eb;
-      border-bottom: 2px solid #2563eb;
-      font-weight: bold;
-    }
-
-    input {
-      width: 100%;
-      padding: 14px;
-      margin: 8px 0;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      font-size: 15px;
-      outline: none;
-    }
-
-    input:focus {
-      border-color: #2563eb;
-    }
-
-    .main-btn {
-      width: 100%;
-      padding: 14px;
-      margin-top: 15px;
-      border: none;
-      border-radius: 10px;
-      background: #2563eb;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .main-btn:active {
-      transform: scale(0.98);
-    }
-
-    .message {
-      text-align: center;
-      margin-top: 15px;
-      color: #2563eb;
-      font-size: 14px;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 25px;
-      font-size: 12px;
-      color: #888;
-    }
-  </style>
-</head>
-
-<body>
-
-  <div class="box">
-
-    <h1>ANKITNAYAK</h1>
-    <p class="subtitle">My Personal Website</p>
-
-    <div class="tabs">
-      <button id="loginTab" class="active" onclick="showLogin()">
-        Login
-      </button>
-
-      <button id="signupTab" onclick="showSignup()">
-        Create Account
-      </button>
-    </div>
-
-    <!-- LOGIN -->
-    <div id="loginForm">
-
-      <input
-        type="email"
-        id="loginEmail"
-        placeholder="Email address"
-      >
-
-      <input
-        type="password"
-        id="loginPassword"
-        placeholder="Password"
-      >
-
-      <button class="main-btn" onclick="login()">
-        Login
-      </button>
-
-      <p id="loginMessage" class="message"></p>
-
-    </div>
+  const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
 
 
-    <!-- SIGNUP -->
-    <div id="signupForm" class="hidden">
+  function showLogin() {
 
-      <input
-        type="text"
-        id="signupName"
-        placeholder="Your name"
-      >
+    document.getElementById("loginForm")
+      .classList.remove("hidden");
 
-      <input
-        type="email"
-        id="signupEmail"
-        placeholder="Email address"
-      >
+    document.getElementById("signupForm")
+      .classList.add("hidden");
 
-      <input
-        type="password"
-        id="signupPassword"
-        placeholder="Create password"
-      >
+    document.getElementById("loginTab")
+      .classList.add("active");
 
-      <button class="main-btn" onclick="signup()">
-        Create Account
-      </button>
-
-      <p id="signupMessage" class="message"></p>
-
-    </div>
-
-    <div class="footer">
-      © 2026 Ankitnayak
-    </div>
-
-  </div>
+    document.getElementById("signupTab")
+      .classList.remove("active");
+  }
 
 
-  <script>
+  function showSignup() {
 
-    function showLogin() {
+    document.getElementById("signupForm")
+      .classList.remove("hidden");
 
-      document.getElementById("loginForm")
-        .classList.remove("hidden");
+    document.getElementById("loginForm")
+      .classList.add("hidden");
 
-      document.getElementById("signupForm")
-        .classList.add("hidden");
+    document.getElementById("signupTab")
+      .classList.add("active");
 
-      document.getElementById("loginTab")
-        .classList.add("active");
+    document.getElementById("loginTab")
+      .classList.remove("active");
+  }
 
-      document.getElementById("signupTab")
-        .classList.remove("active");
+
+  async function signup() {
+
+    const name =
+      document.getElementById("signupName").value.trim();
+
+    const email =
+      document.getElementById("signupEmail").value.trim();
+
+    const password =
+      document.getElementById("signupPassword").value;
+
+    const message =
+      document.getElementById("signupMessage");
+
+
+    if (!name || !email || !password) {
+      message.innerText = "Please fill all details.";
+      return;
     }
 
 
-    function showSignup() {
-
-      document.getElementById("signupForm")
-        .classList.remove("hidden");
-
-      document.getElementById("loginForm")
-        .classList.add("hidden");
-
-      document.getElementById("signupTab")
-        .classList.add("active");
-
-      document.getElementById("loginTab")
-        .classList.remove("active");
+    if (password.length < 6) {
+      message.innerText = "Password must be at least 6 characters.";
+      return;
     }
 
 
-    function signup() {
+    message.innerText = "Creating account...";
 
-      const name =
-        document.getElementById("signupName").value;
 
-      const email =
-        document.getElementById("signupEmail").value;
+    const { data, error } = await supabaseClient.auth.signUp({
 
-      const password =
-        document.getElementById("signupPassword").value;
+      email: email,
 
-      if (!name || !email || !password) {
+      password: password,
 
-        document.getElementById("signupMessage")
-          .innerText = "Please fill all details.";
-
-        return;
+      options: {
+        data: {
+          full_name: name
+        }
       }
 
-      localStorage.setItem("demoUser", email);
+    });
 
-      document.getElementById("signupMessage")
-        .innerText = "Account created! Now login.";
 
-      setTimeout(showLogin, 1000);
+    if (error) {
+
+      message.innerText = error.message;
+
+      return;
     }
 
 
-    function login() {
+    message.innerText =
+      "Account created successfully! 🎉";
 
-      const email =
-        document.getElementById("loginEmail").value;
 
-      const password =
-        document.getElementById("loginPassword").value;
+    setTimeout(showLogin, 1500);
 
-      if (!email || !password) {
+  }
 
-        document.getElementById("loginMessage")
-          .innerText = "Enter email and password.";
 
-        return;
-      }
+  async function login() {
 
-      const savedEmail =
-        localStorage.getItem("demoUser");
+    const email =
+      document.getElementById("loginEmail").value.trim();
 
-      if (email === savedEmail) {
+    const password =
+      document.getElementById("loginPassword").value;
 
-        document.getElementById("loginMessage")
-          .innerText = "Login successful! 🎉";
 
-      } else {
+    const message =
+      document.getElementById("loginMessage");
 
-        document.getElementById("loginMessage")
-          .innerText = "Account not found. Create an account first.";
-      }
+
+    if (!email || !password) {
+
+      message.innerText =
+        "Enter email and password.";
+
+      return;
     }
 
-  </script>
 
-</body>
-</html>
+    message.innerText = "Logging in...";
+
+
+    const { data, error } =
+      await supabaseClient.auth.signInWithPassword({
+
+        email: email,
+
+        password: password
+
+      });
+
+
+    if (error) {
+
+      message.innerText = error.message;
+
+      return;
+    }
+
+
+    message.innerText =
+      "Login successful! 🎉";
+
+
+    console.log("Logged in user:", data.user);
+
+  }
+
+</script>
