@@ -1,45 +1,272 @@
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Ankitnayak - My Personal Website</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #111827, #1e3a8a);
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 25px;
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .tab {
+      width: 50%;
+      padding: 12px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .tab.active {
+      color: #2563eb;
+      border-bottom: 3px solid #2563eb;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 14px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #2563eb;
+    }
+
+    .main-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: #2563eb;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .main-btn:active {
+      transform: scale(0.98);
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 25px;
+      color: #888;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>Ankitnayak</h1>
+
+    <p class="subtitle">
+      My Personal Website
+    </p>
+
+    <div class="tabs">
+
+      <button
+        id="loginTab"
+        class="tab active"
+        onclick="showLogin()">
+        Login
+      </button>
+
+      <button
+        id="signupTab"
+        class="tab"
+        onclick="showSignup()">
+        Create Account
+      </button>
+
+    </div>
+
+
+    <!-- LOGIN -->
+
+    <div id="loginForm">
+
+      <input
+        type="email"
+        id="loginEmail"
+        placeholder="Email address">
+
+      <input
+        type="password"
+        id="loginPassword"
+        placeholder="Password">
+
+      <button
+        class="main-btn"
+        onclick="login()">
+        Login
+      </button>
+
+      <p
+        id="loginMessage"
+        class="message">
+      </p>
+
+    </div>
+
+
+    <!-- SIGN UP -->
+
+    <div
+      id="signupForm"
+      class="hidden">
+
+      <input
+        type="text"
+        id="signupName"
+        placeholder="Your name">
+
+      <input
+        type="email"
+        id="signupEmail"
+        placeholder="Email address">
+
+      <input
+        type="password"
+        id="signupPassword"
+        placeholder="Create password">
+
+      <button
+        class="main-btn"
+        onclick="signup()">
+        Create Account
+      </button>
+
+      <p
+        id="signupMessage"
+        class="message">
+      </p>
+
+    </div>
+
+
+    <div class="footer">
+      © 2026 Ankitnayak
+    </div>
+
+  </div>
+
 
 <script>
 
-  const SUPABASE_URL = "https://jmkmncxcjnrghtsnnlni.supabase.co";
+  const SUPABASE_URL =
+    "https://jmkmncxcjnrghtsnnlni.supabase.co";
 
-  const SUPABASE_PUBLISHABLE_KEY = sb_publishable_yhjkeY9HqvqB3oO03cfAoA_McdVoJoJ
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_yhjkeY9HqvqB3oO03cfAoA_McdVoJoVoJ";
 
-  const supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
+
+  const supabaseClient =
+    supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
 
 
   function showLogin() {
 
-    document.getElementById("loginForm")
+    document
+      .getElementById("loginForm")
       .classList.remove("hidden");
 
-    document.getElementById("signupForm")
+    document
+      .getElementById("signupForm")
       .classList.add("hidden");
 
-    document.getElementById("loginTab")
+    document
+      .getElementById("loginTab")
       .classList.add("active");
 
-    document.getElementById("signupTab")
+    document
+      .getElementById("signupTab")
       .classList.remove("active");
   }
 
 
   function showSignup() {
 
-    document.getElementById("signupForm")
+    document
+      .getElementById("signupForm")
       .classList.remove("hidden");
 
-    document.getElementById("loginForm")
+    document
+      .getElementById("loginForm")
       .classList.add("hidden");
 
-    document.getElementById("signupTab")
+    document
+      .getElementById("signupTab")
       .classList.add("active");
 
-    document.getElementById("loginTab")
+    document
+      .getElementById("loginTab")
       .classList.remove("active");
   }
 
@@ -47,51 +274,68 @@
   async function signup() {
 
     const name =
-      document.getElementById("signupName").value.trim();
+      document
+        .getElementById("signupName")
+        .value
+        .trim();
 
     const email =
-      document.getElementById("signupEmail").value.trim();
+      document
+        .getElementById("signupEmail")
+        .value
+        .trim();
 
     const password =
-      document.getElementById("signupPassword").value;
+      document
+        .getElementById("signupPassword")
+        .value;
 
     const message =
       document.getElementById("signupMessage");
 
 
     if (!name || !email || !password) {
-      message.innerText = "Please fill all details.";
+
+      message.innerText =
+        "Please fill all details.";
+
       return;
     }
 
 
     if (password.length < 6) {
-      message.innerText = "Password must be at least 6 characters.";
+
+      message.innerText =
+        "Password must be at least 6 characters.";
+
       return;
     }
 
 
-    message.innerText = "Creating account...";
+    message.innerText =
+      "Creating account...";
 
 
-    const { data, error } = await supabaseClient.auth.signUp({
+    const { data, error } =
+      await supabaseClient.auth.signUp({
 
-      email: email,
+        email: email,
 
-      password: password,
+        password: password,
 
-      options: {
-        data: {
-          full_name: name
+        options: {
+          data: {
+            full_name: name
+          }
         }
-      }
 
-    });
+      });
 
 
     if (error) {
 
-      message.innerText = error.message;
+      message.innerText =
+        error.message;
 
       return;
     }
@@ -100,20 +344,22 @@
     message.innerText =
       "Account created successfully! 🎉";
 
-
     setTimeout(showLogin, 1500);
-
   }
 
 
   async function login() {
 
     const email =
-      document.getElementById("loginEmail").value.trim();
+      document
+        .getElementById("loginEmail")
+        .value
+        .trim();
 
     const password =
-      document.getElementById("loginPassword").value;
-
+      document
+        .getElementById("loginPassword")
+        .value;
 
     const message =
       document.getElementById("loginMessage");
@@ -128,22 +374,25 @@
     }
 
 
-    message.innerText = "Logging in...";
+    message.innerText =
+      "Logging in...";
 
 
     const { data, error } =
-      await supabaseClient.auth.signInWithPassword({
+      await supabaseClient.auth
+        .signInWithPassword({
 
-        email: email,
+          email: email,
 
-        password: password
+          password: password
 
-      });
+        });
 
 
     if (error) {
 
-      message.innerText = error.message;
+      message.innerText =
+        error.message;
 
       return;
     }
@@ -152,9 +401,13 @@
     message.innerText =
       "Login successful! 🎉";
 
-
-    console.log("Logged in user:", data.user);
-
+    console.log(
+      "Logged in user:",
+      data.user
+    );
   }
 
 </script>
+
+</body>
+</html>
