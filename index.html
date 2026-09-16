@@ -164,13 +164,28 @@
 
   </div>
 
-  <div class="footer">
+  <div class=<div id="dashboard" style="display:none; text-align:center;">
+
+  <h2>Welcome to Ankitnayak 🔐</h2>
+
+  <p style="margin:15px 0;">
+    Your private gallery
+  </p>
+
+  <button class="main-btn" onclick="logout()">
+    Logout
+  </button>
+
+</div>"footer">
     © 2026 Ankitnayak
   </div>
 
 </div>
 
-<script>
+<script>async function logout() {
+  await supabaseClient.auth.signOut();
+  location.reload();
+}
 
   const SUPABASE_URL =
     "https://jmkmncxcjnrghtsnnlni.supabase.co";
@@ -271,8 +286,16 @@
     message.innerText =
       "Account created successfully! 🎉";
 
-    setTimeout(showLogin, 1500);
-  }
+    message.innerText = "Login successful! 🎉";
+
+setTimeout(() => {
+  document.getElementById("loginForm").style.display = "none";
+  document.getElementById("signupForm").style.display = "none";
+  document.querySelector(".tabs").style.display = "none";
+
+  document.getElementById("dashboard").style.display = "block";
+}, 500);
+
 
 
   async function login() {
