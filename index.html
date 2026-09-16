@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Ankitnayak - My Personal Website</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -81,6 +82,7 @@
       color: white;
       font-size: 16px;
       font-weight: bold;
+      cursor: pointer;
     }
 
     .message {
@@ -99,6 +101,14 @@
       color: #888;
       font-size: 13px;
     }
+
+    #dashboard {
+      text-align: center;
+    }
+
+    .logout-btn {
+      margin-top: 15px;
+    }
   </style>
 </head>
 
@@ -107,17 +117,34 @@
 <div class="container">
 
   <h1>Ankitnayak</h1>
-  <p class="subtitle">My Personal Website</p>
 
-  <div class="tabs">
-    <button id="loginTab" class="tab active" onclick="showLogin()">
+  <p class="subtitle">
+    My Personal Website
+  </p>
+
+
+  <!-- LOGIN / SIGNUP TABS -->
+
+  <div class="tabs" id="tabs">
+
+    <button
+      id="loginTab"
+      class="tab active"
+      onclick="showLogin()">
       Login
     </button>
 
-    <button id="signupTab" class="tab" onclick="showSignup()">
+    <button
+      id="signupTab"
+      class="tab"
+      onclick="showSignup()">
       Create Account
     </button>
+
   </div>
+
+
+  <!-- LOGIN FORM -->
 
   <div id="loginForm">
 
@@ -131,15 +158,25 @@
       id="loginPassword"
       placeholder="Password">
 
-    <button class="main-btn" onclick="login()">
+    <button
+      class="main-btn"
+      onclick="login()">
       Login
     </button>
 
-    <p id="loginMessage" class="message"></p>
+    <p
+      id="loginMessage"
+      class="message">
+    </p>
 
   </div>
 
-  <div id="signupForm" class="hidden">
+
+  <!-- SIGNUP FORM -->
+
+  <div
+    id="signupForm"
+    class="hidden">
 
     <input
       type="text"
@@ -156,47 +193,60 @@
       id="signupPassword"
       placeholder="Create password">
 
-    <button class="main-btn" onclick="signup()">
+    <button
+      class="main-btn"
+      onclick="signup()">
       Create Account
     </button>
 
-    <p id="signupMessage" class="message"></p>
+    <p
+      id="signupMessage"
+      class="message">
+    </p>
 
   </div>
 
-  <div class=<div id="dashboard" style="display:none; text-align:center;">
 
-  <h2>Welcome to Ankitnayak 🔐</h2>
+  <!-- DASHBOARD -->
 
-  <p style="margin:15px 0;">
-    Your private gallery
-  </p>
+  <div
+    id="dashboard"
+    class="hidden">
 
-  <button class="main-btn" onclick="logout()">
-    Logout
-  </button>
+    <h2>
+      Welcome to Ankitnayak 🔐
+    </h2>
 
-</div>"footer">
+    <p>
+      Your private gallery
+    </p>
+
+    <button
+      class="main-btn logout-btn"
+      onclick="logout()">
+      Logout
+    </button>
+
+  </div>
+
+
+  <div class="footer">
     © 2026 Ankitnayak
   </div>
 
 </div>
 
-<script>async function logout() {
-  await supabaseClient.auth.signOut();
-  location.reload();
-}
+
+<script>
+
+  /* SUPABASE */
 
   const SUPABASE_URL =
     "https://jmkmncxcjnrghtsnnlni.supabase.co";
 
-  /*
-    IMPORTANT:
-    नीचे अपनी नई Supabase Publishable Key paste करो.
-  */
-
   const SUPABASE_PUBLISHABLE_KEY =
     sb_publishable_yhjkeY9HqvqB3oO03cfAoA_McdVoJoJ
+
 
   const supabaseClient =
     supabase.createClient(
@@ -205,69 +255,102 @@
     );
 
 
+  /* SHOW LOGIN */
+
   function showLogin() {
 
-    document.getElementById("loginForm")
+    document
+      .getElementById("loginForm")
       .classList.remove("hidden");
 
-    document.getElementById("signupForm")
+    document
+      .getElementById("signupForm")
       .classList.add("hidden");
 
-    document.getElementById("loginTab")
+    document
+      .getElementById("loginTab")
       .classList.add("active");
 
-    document.getElementById("signupTab")
+    document
+      .getElementById("signupTab")
       .classList.remove("active");
   }
 
+
+  /* SHOW SIGNUP */
 
   function showSignup() {
 
-    document.getElementById("signupForm")
+    document
+      .getElementById("signupForm")
       .classList.remove("hidden");
 
-    document.getElementById("loginForm")
+    document
+      .getElementById("loginForm")
       .classList.add("hidden");
 
-    document.getElementById("signupTab")
+    document
+      .getElementById("signupTab")
       .classList.add("active");
 
-    document.getElementById("loginTab")
+    document
+      .getElementById("loginTab")
       .classList.remove("active");
   }
 
+
+  /* CREATE ACCOUNT */
 
   async function signup() {
 
     const name =
-      document.getElementById("signupName").value.trim();
+      document
+        .getElementById("signupName")
+        .value
+        .trim();
 
     const email =
-      document.getElementById("signupEmail").value.trim();
+      document
+        .getElementById("signupEmail")
+        .value
+        .trim();
 
     const password =
-      document.getElementById("signupPassword").value;
+      document
+        .getElementById("signupPassword")
+        .value;
 
     const message =
       document.getElementById("signupMessage");
 
+
     if (!name || !email || !password) {
-      message.innerText = "Please fill all details.";
+
+      message.innerText =
+        "Please fill all details.";
+
       return;
     }
+
 
     if (password.length < 6) {
+
       message.innerText =
         "Password must be at least 6 characters.";
+
       return;
     }
 
-    message.innerText = "Creating account...";
+
+    message.innerText =
+      "Creating account...";
+
 
     const { error } =
       await supabaseClient.auth.signUp({
 
         email: email,
+
         password: password,
 
         options: {
@@ -278,62 +361,116 @@
 
       });
 
+
     if (error) {
-      message.innerText = error.message;
+
+      message.innerText =
+        error.message;
+
       return;
     }
+
 
     message.innerText =
       "Account created successfully! 🎉";
 
-    message.innerText = "Login successful! 🎉";
 
-setTimeout(() => {
-  document.getElementById("loginForm").style.display = "none";
-  document.getElementById("signupForm").style.display = "none";
-  document.querySelector(".tabs").style.display = "none";
+    setTimeout(() => {
 
-  document.getElementById("dashboard").style.display = "block";
-}, 500);
+      showLogin();
+
+    }, 1500);
+
+  }
 
 
+  /* LOGIN */
 
   async function login() {
 
     const email =
-      document.getElementById("loginEmail").value.trim();
+      document
+        .getElementById("loginEmail")
+        .value
+        .trim();
 
     const password =
-      document.getElementById("loginPassword").value;
+      document
+        .getElementById("loginPassword")
+        .value;
 
     const message =
       document.getElementById("loginMessage");
 
+
     if (!email || !password) {
+
       message.innerText =
         "Enter email and password.";
+
       return;
     }
 
-    message.innerText = "Logging in...";
+
+    message.innerText =
+      "Logging in...";
+
 
     const { data, error } =
-      await supabaseClient.auth.signInWithPassword({
+      await supabaseClient.auth
+        .signInWithPassword({
 
-        email: email,
-        password: password
+          email: email,
 
-      });
+          password: password
+
+        });
+
 
     if (error) {
-      message.innerText = error.message;
+
+      message.innerText =
+        error.message;
+
       return;
     }
+
 
     message.innerText =
       "Login successful! 🎉";
 
-    console.log("Logged in user:", data.user);
+
+    setTimeout(() => {
+
+      document
+        .getElementById("loginForm")
+        .classList.add("hidden");
+
+      document
+        .getElementById("signupForm")
+        .classList.add("hidden");
+
+      document
+        .getElementById("tabs")
+        .classList.add("hidden");
+
+      document
+        .getElementById("dashboard")
+        .classList.remove("hidden");
+
+    }, 500);
+
+  }
+
+
+  /* LOGOUT */
+
+  async function logout() {
+
+    await supabaseClient.auth.signOut();
+
+    location.reload();
+
   }
 
 </script>
