@@ -238,242 +238,117 @@
 
 
 <script>
+<script>
+const SUPABASE_URL = "https://jmkmncxcjnrghtsnnlni.supabase.co";
 
-  /* SUPABASE */
-
-  const SUPABASE_URL =
-    "https://jmkmncxcjnrghtsnnlni.supabase.co";
-
-  const SUPABASE_PUBLISHABLE_KEY =
-    
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_yhjkeY9HqvqB3oO03cfAoA_McdVoJoJ";
 
-  const supabaseClient =
-    supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY
-    );
+const supabaseClient = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
 
+function showLogin() {
+  document.getElementById("loginForm").classList.remove("hidden");
+  document.getElementById("signupForm").classList.add("hidden");
+  document.getElementById("loginTab").classList.add("active");
+  document.getElementById("signupTab").classList.remove("active");
+}
 
-  /* SHOW LOGIN */
+function showSignup() {
+  document.getElementById("signupForm").classList.remove("hidden");
+  document.getElementById("loginForm").classList.add("hidden");
+  document.getElementById("signupTab").classList.add("active");
+  document.getElementById("loginTab").classList.remove("active");
+}
 
-  function showLogin() {
+async function signup() {
+  const name = document.getElementById("signupName").value.trim();
+  const email = document.getElementById("signupEmail").value.trim();
+  const password = document.getElementById("signupPassword").value;
+  const message = document.getElementById("signupMessage");
 
-    document
-      .getElementById("loginForm")
-      .classList.remove("hidden");
-
-    document
-      .getElementById("signupForm")
-      .classList.add("hidden");
-
-    document
-      .getElementById("loginTab")
-      .classList.add("active");
-
-    document
-      .getElementById("signupTab")
-      .classList.remove("active");
+  if (!name || !email || !password) {
+    message.innerText = "Please fill all details.";
+    return;
   }
 
-
-  /* SHOW SIGNUP */
-
-  function showSignup() {
-
-    document
-      .getElementById("signupForm")
-      .classList.remove("hidden");
-
-    document
-      .getElementById("loginForm")
-      .classList.add("hidden");
-
-    document
-      .getElementById("signupTab")
-      .classList.add("active");
-
-    document
-      .getElementById("loginTab")
-      .classList.remove("active");
+  if (password.length < 6) {
+    message.innerText = "Password must be at least 6 characters.";
+    return;
   }
 
+  message.innerText = "Creating account...";
 
-  /* CREATE ACCOUNT */
-
-  async function signup() {
-
-    const name =
-      document
-        .getElementById("signupName")
-        .value
-        .trim();
-
-    const email =
-      document
-        .getElementById("signupEmail")
-        .value
-        .trim();
-
-    const password =
-      document
-        .getElementById("signupPassword")
-        .value;
-
-    const message =
-      document.getElementById("signupMessage");
-
-
-    if (!name || !email || !password) {
-
-      message.innerText =
-        "Please fill all details.";
-
-      return;
-    }
-
-
-    if (password.length < 6) {
-
-      message.innerText =
-        "Password must be at least 6 characters.";
-
-      return;
-    }
-
-
-    message.innerText =
-      "Creating account...";
-
-
-    const { error } =
-      await supabaseClient.auth.signUp({
-
-        email: email,
-
-        password: password,
-
-        options: {
-          data: {
-            full_name: name
-          }
+  try {
+    const { error } = await supabaseClient.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: name
         }
-
-      });
-
+      }
+    });
 
     if (error) {
-
-      message.innerText =
-        error.message;
-
+      message.innerText = error.message;
       return;
     }
 
-
-    message.innerText =
-      "Account created successfully! 🎉";
-
+    message.innerText = "Account created successfully! 🎉";
 
     setTimeout(() => {
-
       showLogin();
-
     }, 1500);
 
+  } catch (err) {
+    message.innerText = "Error: " + err.message;
+  }
+}
+
+async function login() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
+  const message = document.getElementById("loginMessage");
+
+  if (!email || !password) {
+    message.innerText = "Enter email and password.";
+    return;
   }
 
+  message.innerText = "Logging in...";
 
-  /* LOGIN */
-
-  async function login() {
-
-    const email =
-      document
-        .getElementById("loginEmail")
-        .value
-        .trim();
-
-    const password =
-      document
-        .getElementById("loginPassword")
-        .value;
-
-    const message =
-      document.getElementById("loginMessage");
-
-
-    if (!email || !password) {
-
-      message.innerText =
-        "Enter email and password.";
-
-      return;
-    }
-
-
-    message.innerText =
-      "Logging in...";
-
-
+  try {
     const { data, error } =
-      await supabaseClient.auth
-        .signInWithPassword({
-
-          email: email,
-
-          password: password
-
-        });
-
+      await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
 
     if (error) {
-
-      message.innerText =
-        error.message;
-
+      message.innerText = "Login error: " + error.message;
       return;
     }
 
+    message.innerText = "Login successful! 🎉";
 
-    message.innerText =
-      "Login successful! 🎉";
+    document.getElementById("loginForm").classList.add("hidden");
+    document.getElementById("signupForm").classList.add("hidden");
+    document.getElementById("tabs").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
 
-
-    setTimeout(() => {
-
-      document
-        .getElementById("loginForm")
-        .classList.add("hidden");
-
-      document
-        .getElementById("signupForm")
-        .classList.add("hidden");
-
-      document
-        .getElementById("tabs")
-        .classList.add("hidden");
-
-      document
-        .getElementById("dashboard")
-        .classList.remove("hidden");
-
-    }, 500);
-
+  } catch (err) {
+    message.innerText = "Connection error: " + err.message;
   }
+}
 
-
-  /* LOGOUT */
-
-  async function logout() {
-
-    await supabaseClient.auth.signOut();
-
-    location.reload();
-
-  }
-
+async function logout() {
+  await supabaseClient.auth.signOut();
+  location.reload();
+}
+</script>
 </script>
 
 </body>
